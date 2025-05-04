@@ -1,483 +1,392 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2761
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red110\green110\blue109;
-\red174\green174\blue173;\red155\green170\blue186;\red189\green97\blue35;\red88\green117\blue70;\red89\green135\blue175;
-\red130\green64\blue123;}
-{\*\expandedcolortbl;;\cssrgb\c0\c1\c1;\cssrgb\c100000\c100000\c100000;\cssrgb\c50524\c50523\c50146;
-\cssrgb\c73813\c73811\c73260;\cssrgb\c66961\c72504\c77887;\cssrgb\c79268\c46035\c17986;\cssrgb\c41462\c52801\c34365;\cssrgb\c41712\c60299\c74107;
-\cssrgb\c58483\c33763\c55451;}
-\margl1440\margr1440\vieww38200\viewh20560\viewkind0
-\deftab720
-\pard\pardeftab720\partightenfactor0
+# Connect To the DataCenter with Public Key.
 
-\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec4 # Connect To the DataCenter with Public Key.\cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 ssh -i Downloads/file.pem biadmin@public_dns_address\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Copy public key on to the DataCenter main server\cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 scp -i /home/cloudage/jinga.pem ~/jinga.pem biadmin@ec2-52-66-138-12.ap-south-1.compute.amazonaws.com:~/.ssh\cf2 \strokec5 \
-\cf2 \strokec6 pscp -i  jinga.ppk jinga.pem biadmin@public_ip:/home/biadmin/.ssh\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Take Control \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo -i\cf2 \strokec5 \
-\cf2 \strokec6 passwd\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 exit\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Create a Hadoop user for accessing HDFS\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo addgroup biadmin\cf2 \strokec5 \
-\cf2 \strokec6 sudo adduser --ingroup biadmin biadmin\cf2 \strokec5 \
-\cf2 \strokec6 sudo adduser biadmin sudo\cf2 \strokec5 \
-\cf2 \strokec6 sudo su biadmin\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Install Java 8\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo apt-get install -y python-software-properties debconf-utils\cf2 \strokec5 \
-\cf2 \strokec6 sudo add-apt-repository -y ppa:webupd8team/java\cf2 \strokec5 \
-\cf2 \strokec6 sudo apt-get update\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 echo\cf2 \strokec6  \cf2 \strokec7 "\cf2 \strokec8 oracle-java8-installer shared/accepted-oracle-license-v1-1 select true\cf2 \strokec7 "\cf2 \strokec6  \cf2 \strokec7 |\cf2 \strokec6  sudo debconf-set-selections\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo apt-get install -y oracle-java8-installer\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo apt-get install -y openjdk-8-jdk \cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Set Enviornment Variable\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 readlink -f $(\cf2 \strokec7 which\cf2 \strokec6  java)\cf2 \strokec5 \
-\
-\cf2 \strokec6 cat \cf2 \strokec7 >>\cf2 \strokec6 $HOME/.bashrc \cf2 \strokec7 <<\cf2 \strokec6 EOL\cf2 \strokec5 \
-\cf2 \strokec6 # -- HADOOP ENVIRONMENT VARIABLES START -- #\cf2 \strokec5 \
-\cf2 \strokec6 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/\cf2 \strokec5 \
-\cf2 \strokec6 export HADOOP_HOME=/usr/local/hadoop\cf2 \strokec5 \
-\cf2 \strokec6 export PATH=\\$PATH:\\$HADOOP_HOME/bin\cf2 \strokec5 \
-\cf2 \strokec6 export PATH=\\$PATH:\\$HADOOP_HOME/sbin\cf2 \strokec5 \
-\cf2 \strokec6 export PATH=\\$PATH:/usr/local/hadoop/bin/\cf2 \strokec5 \
-\cf2 \strokec6 export HADOOP_MAPRED_HOME=\\$HADOOP_HOME\cf2 \strokec5 \
-\cf2 \strokec6 export HADOOP_COMMON_HOME=\\$HADOOP_HOME\cf2 \strokec5 \
-\cf2 \strokec6 export HADOOP_HDFS_HOME=\\$HADOOP_HOME\cf2 \strokec5 \
-\cf2 \strokec6 export YARN_HOME=\\$HADOOP_HOME\cf2 \strokec5 \
-\cf2 \strokec6 export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop\cf2 \strokec5 \
-\cf2 \strokec6 export PDSH_RCMD_TYPE=ssh\cf2 \strokec5 \
-\cf2 \strokec6 # -- HADOOP ENVIRONMENT VARIABLES END -- #\cf2 \strokec5 \
-\cf2 \strokec6 EOL\cf2 \strokec5 \
-\
-\cf2 \strokec6  \cf2 \strokec7 exec\cf2 \strokec6  bash\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo chown -R biadmin:biadmin /usr/local/hadoop\cf2 \strokec5 \
-\cf2 \strokec6                                    \cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update hadoop-env.sh\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 echo export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 echo export HADOOP_LOG_DIR=/var/log/hadoop/ >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo mkdir /var/log/hadoop/\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo chown biadmin:biadmin -R /var/log/hadoop\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Disable SELINUX \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 setenforce \cf2 \strokec9 0\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo apt update\cf2 \strokec5 \
-\cf2 \strokec6 sudo apt install selinux-utils selinux-basics\cf2 \strokec5 \
-\cf2 \strokec6 cat /etc/selinux/config\cf2 \strokec5 \
-\
-\cf2 \strokec6 SELINUX\cf2 \strokec7 =\cf2 \strokec6 disabled\cf2 \strokec5 \
-\cf2 \strokec6 SELINUXTYPE\cf2 \strokec7 =\cf2 \strokec6 targeted\cf2 \strokec5 \
-\cf2 \strokec6 SETLOCALDEFS\cf2 \strokec7 =\cf2 \strokec6 0\cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Disable IPV6 \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 cat /proc/sys/net/ipv6/conf/all/disable_ipv6\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo sysctl -p\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/etc/sysctl.conf <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 net.ipv6.conf.all.disable_ipv6 =1\cf2 \strokec5 \
-\cf2 \strokec8 net.ipv6.conf.default.disable_ipv6 =1\cf2 \strokec5 \
-\cf2 \strokec8 net.ipv6.conf.lo.disable_ipv6 =1\cf2 \strokec5 \
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Disable FireWall iptables\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo iptables -L -n -v \cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo iptables-save \cf2 \strokec7 >\cf2 \strokec6  firewall.rules \cf2 \strokec5 \
-\
-\cf2 \strokec6 The Uncomplicated Firewall or ufw is the configuration tool for iptables that comes by default on biadmin\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo ufw status verbose \cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo ufw status verbose\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Disabling Transparent Hugepage Compaction\cf2 \strokec5 \
-\
-\cf2 \strokec4 #Red Hat/CentOS: /sys/kernel/mm/redhat_transparent_hugepage/defrag\cf2 \strokec5 \
-\
-\cf2 \strokec4 #biadmin/Debian, OEL, SLES: /sys/kernel/mm/transparent_hugepage/defrag\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 cat /sys/kernel/mm/transparent_hugepage/defrag\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo -i\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #source /etc/rc.local\cf2 \strokec5 \
-\
-\
-\cf2 \strokec4 #nano /etc/systemd/system/disable-thp.service\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo nano /etc/default/grub\cf2 \strokec5 \
-\
-\cf2 \strokec6 GRUB_CMDLINE_LINUX_DEFAULT\cf2 \strokec7 ="\cf2 \strokec8 quiet splash transparent_hugepage=never\cf2 \strokec7 "\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo update-grub\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Set Swappiness\cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo sysctl -a \cf2 \strokec7 |\cf2 \strokec6  grep vm.swappiness\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/etc/sysctl.conf <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 '\cf2 \strokec6 vm.swappiness=\cf2 \strokec9 0\cf2 \strokec7 '\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo sysctl -p\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Configure NTP \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 timedatectl status\cf2 \strokec5 \
-\cf2 \strokec6 timedatectl list-timezones\cf2 \strokec5 \
-\cf2 \strokec6 timedatectl list-timezones \cf2 \strokec7 |\cf2 \strokec6  grep Asia/Kolkata\cf2 \strokec5 \
-\cf2 \strokec6 sudo timedatectl set-timezone Asia/Kolkata\cf2 \strokec5 \
-\cf2 \strokec6 timedatectl status\cf2 \strokec5 \
-\cf2 \strokec6 sudo ntpq -p\cf2 \strokec5 \
-\cf2 \strokec6 sudo apt-get install ntp -y\cf2 \strokec5 \
-\cf2 \strokec6 timedatectl status\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo nano /etc/ntpsec/ntp.conf\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Root Reserved Space\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 mkfs.ext4 -m \cf2 \strokec9 0\cf2 \strokec6  /dev/xvda1 ( filesystem is not suppose to be mounted)\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo file -sL /dev/xvda1\cf2 \strokec5 \
-\
-\cf2 \strokec6 lsblk\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo tune2fs -m \cf2 \strokec9 0\cf2 \strokec6  /dev/xvda1\cf2 \strokec5 \
-\
-\cf2 \strokec6 Most frequently asked Question whether a JBOD configuration, RAID configuration, or LVM configuration is required. The entire Hadoop ecosystem was created with a JBOD configuration in mind. HDFS is an immutable filesystem that was designed for large file sizes with long sequential reads. This goal plays well with stand-alone SATA drives, as they get the best performance with sequential reads.\cf2 \strokec5 \
-\cf2 \strokec6 In summary, whereas RAID is typically used to add redundancy to an existing system, HDFS already has that built in.\cf2 \strokec5 \
-\cf2 \strokec6 In fact, using a RAID system with Hadoop can negatively affect performance.\cf2 \strokec5 \
-\cf2 \strokec6 For the same reasons, configuring your Hadoop drives under LVM is neither necessary nor recommended.\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 ##Configure SSH Password less logins \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo su -c touch /home/biadmin/.ssh/config; \cf2 \strokec7 echo\cf2 \strokec6  -e \\ \cf2 \strokec7 "\cf2 \strokec8 Host *\\n StrictHostKeyChecking no\\n  UserKnownHostsFile=/dev/null\cf2 \strokec7 "\cf2 \strokec6  \\ \cf2 \strokec7 >\cf2 \strokec6  ~/.ssh/config\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 echo\cf2 \strokec6  -e  \cf2 \strokec7 '\cf2 \strokec8 y\\n\cf2 \strokec7 '|\cf2 \strokec6  ssh-keygen -t rsa -P \cf2 \strokec7 ""\cf2 \strokec6  -f $HOME/.ssh/id_rsa\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 cat $HOME/.ssh/id_rsa.pub \cf2 \strokec7 >>\cf2 \strokec6  $HOME/.ssh/authorized_keys\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo service ssh restart\cf2 \strokec5 \
-\
-\cf2 \strokec6 ssh localhost\cf2 \strokec5 \
-\
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Install Hadoop\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz -P ~/Downloads\cf2 \strokec5 \
-\cf2 \strokec6 sudo tar zxvf ~/Downloads/hadoop-\cf2 \strokec10 *\cf2 \strokec6  -C /usr/local\cf2 \strokec5 \
-\cf2 \strokec6 sudo mv /usr/local/hadoop-\cf2 \strokec10 *\cf2 \strokec6  /usr/local/hadoop\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo apt-get update && sudo apt-get dist-upgrade -y && sudo reboot\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #CREATE SNAPSHOT AT THIS POINT.\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo nano /etc/hosts and include these lines:FQDN\cf2 \strokec5 \
-\
-\
-\cf2 \strokec6 127.0.0.1 localhost\cf2 \strokec5 \
-\
-\cf2 \strokec6 172.31.30.102  ip-172-31-30-102.ap-south-1.compute.internal nn\cf2 \strokec5 \
-\cf2 \strokec6 172.31.23.4   ip-172-31-23-4.ap-south-1.compute.internal rm\cf2 \strokec5 \
-\cf2 \strokec6 172.31.23.3  ip-172-31-23-3.ap-south-1.compute.internal dn\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 # Configure pdsh\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo apt-get install pdsh -y\cf2 \strokec5 \
-\cf2 \strokec6 sudo nano /etc/genders\cf2 \strokec5 \
-\cf2 \strokec6 export PDSH_RCMD_TYPE\cf2 \strokec7 =\cf2 \strokec6 ssh\cf2 \strokec5 \
-\cf2 \strokec6 pdsh -a uptime\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Setting Up Secondary Name Node\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 create the masters file in HADOOP_CONF_DIR\cf2 \strokec5 \
-\cf2 \strokec6   \cf2 \strokec5 \
-\cf2 \strokec6 hostname -f  \cf2 \strokec7 >\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/masters\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 <\cf2 \strokec6 property\cf2 \strokec7 >\cf2 \strokec6  \cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6    \cf2 \strokec7 <\cf2 \strokec6 name>dfs.secondary.http.address</name>\cf2 \strokec5 \
-\cf2 \strokec6    \cf2 \strokec7 <\cf2 \strokec6 value>$secondarynamenode.full.hostname:50090</value>\cf2 \strokec5 \
-\cf2 \strokec6    \cf2 \strokec7 <\cf2 \strokec6 description>SecondaryNameNodeHostname</description>\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 <\cf2 \strokec6 /property\cf2 \strokec7 >\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 nano /usr/local/hadoop/etc/hadoop/slaves\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update core-site.xml\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo sed -i \cf2 \strokec7 '\cf2 \strokec8 /<configuration>/,/<\\/configuration>/d\cf2 \strokec7 '\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/core-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >> /usr/local/hadoop/etc/hadoop/core-site.xml <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 <configuration>\cf2 \strokec5 \
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>fs.defaultFS</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>hdfs://nn:9000</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8 </configuration>\cf2 \strokec5 \
-\
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update hdfs-site.xml on name node \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 mkdir -p /usr/local/hadoop/data/hdfs/namenode\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo sed -i \cf2 \strokec7 '\cf2 \strokec8 /<configuration>/,/<\\/configuration>/d\cf2 \strokec7 '\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/hdfs-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/usr/local/hadoop/etc/hadoop/hdfs-site.xml <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 <configuration>\cf2 \strokec5 \
-\cf2 \strokec8   \cf2 \strokec5 \
-\
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>dfs.namenode.name.dir</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>file:///usr/local/hadoop/data/hdfs/namenode</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8 <property> \cf2 \strokec5 \
-\cf2 \strokec8    <name>dfs.secondary.http.address</name>\cf2 \strokec5 \
-\cf2 \strokec8    <value>localhost:50090</value>\cf2 \strokec5 \
-\cf2 \strokec8    <description>SecondaryNameNodeHostname</description>\cf2 \strokec5 \
-\cf2 \strokec8 </property>\cf2 \strokec5 \
-\cf2 \strokec8  <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>dfs.datanode.name.dir</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>file:///usr/local/hadoop/data/hdfs/datanode</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8 </configuration>\cf2 \strokec5 \
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 ssh dn\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update hdfs-site.xml on datanode\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo sed -i \cf2 \strokec7 '\cf2 \strokec8 /<configuration>/,/<\\/configuration>/d\cf2 \strokec7 '\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/hdfs-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/usr/local/hadoop/etc/hadoop/hdfs-site.xml <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 <configuration>\cf2 \strokec5 \
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>dfs.replication</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>2</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>dfs.datanode.name.dir</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>file:///usr/local/hadoop/data/hdfs/datanode</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8 </configuration>\cf2 \strokec5 \
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 mkdir -p /usr/local/hadoop/data/hdfs/datanode\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 exit\cf2 \strokec6  \cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update yarn-site.xml\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6   sudo sed -i \cf2 \strokec7 '\cf2 \strokec8 /<configuration>/,/<\\/configuration>/d\cf2 \strokec7 '\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/yarn-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/usr/local/hadoop/etc/hadoop/yarn-site.xml <<EOL\cf2 \strokec5 \
-\
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 <configuration>\cf2 \strokec5 \
-\cf2 \strokec8 <!-- Site specific YARN configuration properties -->\cf2 \strokec5 \
-\cf2 \strokec8  <property>\cf2 \strokec5 \
-\cf2 \strokec8      <name>yarn.nodemanager.aux-services</name>\cf2 \strokec5 \
-\cf2 \strokec8      <value>mapreduce_shuffle</value>\cf2 \strokec5 \
-\cf2 \strokec8    </property> \cf2 \strokec5 \
-\cf2 \strokec8    <property>\cf2 \strokec5 \
-\cf2 \strokec8      <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>\cf2 \strokec5 \
-\cf2 \strokec8      <value>org.apache.hadoop.mapred.ShuffleHandler</value>\cf2 \strokec5 \
-\cf2 \strokec8    </property>\cf2 \strokec5 \
-\cf2 \strokec8    <property>\cf2 \strokec5 \
-\cf2 \strokec8      <name>yarn.resourcemanager.hostname</name>\cf2 \strokec5 \
-\cf2 \strokec8      <value>rm</value>\cf2 \strokec5 \
-\cf2 \strokec8    </property>\cf2 \strokec5 \
-\cf2 \strokec8 </configuration>\cf2 \strokec5 \
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Update mapred-site.xml\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 cp  /usr/local/hadoop/etc/hadoop/mapred-site.xml.template /usr/local/hadoop/etc/hadoop/mapred-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo sed -i \cf2 \strokec7 '\cf2 \strokec8 /<configuration>/,/<\\/configuration>/d\cf2 \strokec7 '\cf2 \strokec6  /usr/local/hadoop/etc/hadoop/mapred-site.xml\cf2 \strokec5 \
-\
-\cf2 \strokec6 sudo su -c \cf2 \strokec7 '\cf2 \strokec8 cat >>/usr/local/hadoop/etc/hadoop/mapred-site.xml <<EOL\cf2 \strokec5 \
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec8 <configuration>\cf2 \strokec5 \
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>mapreduce.jobtracker.address</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>rm:54311</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8   <property>\cf2 \strokec5 \
-\cf2 \strokec8     <name>mapreduce.framework.name</name>\cf2 \strokec5 \
-\cf2 \strokec8     <value>yarn</value>\cf2 \strokec5 \
-\cf2 \strokec8   </property>\cf2 \strokec5 \
-\cf2 \strokec8 </configuration>\cf2 \strokec5 \
-\cf2 \strokec8 EOL\cf2 \strokec7 '\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 sudo chown -R biadmin:biadmin $HADOOP_HOME\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #SCP all the files to ...dn...rm...\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 cd\cf2 \strokec6  /usr/local/hadoop/etc/hadoop && scp core-site.xml mapred-site.xml yarn-site.xml slaves rm:/usr/local/hadoop/etc/hadoop\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 ssh dn for hdfs-site.xml\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec7 exit\cf2 \strokec6  to nn\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec4 #Format Namenode\cf2 \strokec5 \
-\
-\pard\pardeftab720\partightenfactor0
-\cf2 \strokec6 hdfs namenode -format\cf2 \strokec5 \
-\
-\cf2 \strokec6 LOOK FOR ERROR Message namenode has been successfully formatted.\cf2 \strokec5 \
-\
-\cf2 \strokec6 start-dfs.sh\cf2 \strokec5 \
-\
-\cf2 \strokec6 $HADOOP_HOME/sbin/mr-jobhistory-daemon.sh start historyserver\cf2 \strokec5 \
-\
-\cf2 \strokec6 ssh rm\cf2 \strokec5 \
-\
-\cf2 \strokec6 start-yarn.sh\cf2 \strokec5 \
-\
-\cf2 \strokec6 pdsh -a jps\cf2 \strokec5 \
-\cf2 \strokec6 pdsh -w dn jps\cf2 \strokec5 \
-\cf2 \strokec6 pdsh -w rm jps\cf2 \strokec5 \
-\cf2 \strokec6 pdsh -w nn jps\cf2 \strokec5 \
-\cf2 \strokec6 pdsh -a (press enter)\cf2 \strokec5 \
-\cf2 \strokec6 pdsh>> ls\cf2 \strokec5 \
-\cf2 \strokec6 hdfs dfs -mkdir /user\cf2 \strokec5 \
-\cf2 \strokec6 hdfs dfs -mkdir /user/biadmin\cf2 \strokec5 \
-\
-\cf2 \strokec6 hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-\cf2 \strokec10 *\cf2 \strokec6 .jar teragen \cf2 \strokec9 500000\cf2 \strokec6  random-data\cf2 \strokec5 \
-\
-\cf2 \strokec6 hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-\cf2 \strokec10 *\cf2 \strokec6 .jar terasort random-data sorted-data\cf2 \strokec5 \
-\
-\cf2 \strokec6 hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-\cf2 \strokec10 *\cf2 \strokec6 -tests.jar TestDFSIO -write -nrFiles \cf2 \strokec9 10\cf2 \strokec6  -fileSize 5MB\cf2 \strokec5 \
-\
-\cf2 \strokec6 hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-\cf2 \strokec10 *\cf2 \strokec6 -tests.jar TestDFSIO -read -nrFiles \cf2 \strokec9 10\cf2 \strokec6  -fileSize 5MB\cf2 \strokec5 \
-\
-\cf2 \strokec6 NameNode \cf2 \strokec5 \
-\cf2 \strokec6 http://nn_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is 50070. \cf2 \strokec5 \
-\cf2 \strokec6 ResourceManager \cf2 \strokec5 \
-\cf2 \strokec6 http://rm_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is 8088. \cf2 \strokec5 \
-\cf2 \strokec6 MapReduce JobHistory Server \cf2 \strokec5 \
-\cf2 \strokec6 http://jhs_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is 19888. \cf2 \strokec5 \
-\
-\
-\cf2 \strokec6 SecondaryNameNode \cf2 \strokec5 \
-\cf2 \strokec6 http://snn_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is \cf2 \strokec9 50090\cf2 \strokec5 \
-\cf2 \strokec6 DataNode\cf2 \strokec5 \
-\cf2 \strokec6 http://dn_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is 50075. \cf2 \strokec5 \
-\
-\cf2 \strokec6 http://jhs_host:port/ \cf2 \strokec5 \
-\cf2 \strokec6 Default HTTP port is 19888. \cf2 \strokec5 \
-\
-\cf2 \strokec6 hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar pi \cf2 \strokec9 10\cf2 \strokec6  \cf2 \strokec9 100000\cf2 \strokec5 \
-\
-\
+
+ssh -i Downloads/file.pem biadmin@public_dns_address
+
+# Copy public key on to the DataCenter main server
+
+
+scp -i /home/cloudage/jinga.pem ~/jinga.pem biadmin@ec2-52-66-138-12.ap-south-1.compute.amazonaws.com:~/.ssh
+pscp -i  jinga.ppk jinga.pem biadmin@public_ip:/home/biadmin/.ssh
+
+# Take Control 
+
+sudo -i
+passwd
+exit
+
+# Create a Hadoop user for accessing HDFS
+
+sudo addgroup biadmin
+sudo adduser --ingroup biadmin biadmin
+sudo adduser biadmin sudo
+sudo su biadmin
+
+# Install Java 8
+
+sudo apt-get install -y python-software-properties debconf-utils
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt-get update
+echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+sudo apt-get install -y oracle-java8-installer
+
+sudo apt-get install -y openjdk-8-jdk 
+
+
+# Set Enviornment Variable
+
+readlink -f $(which java)
+
+cat >>$HOME/.bashrc <<EOL
+# -- HADOOP ENVIRONMENT VARIABLES START -- #
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=\$PATH:\$HADOOP_HOME/bin
+export PATH=\$PATH:\$HADOOP_HOME/sbin
+export PATH=\$PATH:/usr/local/hadoop/bin/
+export HADOOP_MAPRED_HOME=\$HADOOP_HOME
+export HADOOP_COMMON_HOME=\$HADOOP_HOME
+export HADOOP_HDFS_HOME=\$HADOOP_HOME
+export YARN_HOME=\$HADOOP_HOME
+export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
+export PDSH_RCMD_TYPE=ssh
+# -- HADOOP ENVIRONMENT VARIABLES END -- #
+EOL
+
+ exec bash
+
+sudo chown -R biadmin:biadmin /usr/local/hadoop
+                                   
+#Update hadoop-env.sh
+
+sudo su -c 'echo export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh'
+
+sudo su -c 'echo export HADOOP_LOG_DIR=/var/log/hadoop/ >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh'
+
+sudo mkdir /var/log/hadoop/
+
+sudo chown biadmin:biadmin -R /var/log/hadoop
+
+# Disable SELINUX 
+
+setenforce 0
+
+sudo apt update
+sudo apt install selinux-utils selinux-basics
+cat /etc/selinux/config
+
+SELINUX=disabled
+SELINUXTYPE=targeted
+SETLOCALDEFS=0
+
+
+#Disable IPV6 
+
+cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+sudo sysctl -p
+
+sudo su -c 'cat >>/etc/sysctl.conf <<EOL
+net.ipv6.conf.all.disable_ipv6 =1
+net.ipv6.conf.default.disable_ipv6 =1
+net.ipv6.conf.lo.disable_ipv6 =1
+EOL'
+
+#Disable FireWall iptables
+
+sudo iptables -L -n -v 
+
+sudo iptables-save > firewall.rules 
+
+The Uncomplicated Firewall or ufw is the configuration tool for iptables that comes by default on biadmin
+
+sudo ufw status verbose 
+
+sudo ufw status verbose
+
+#Disabling Transparent Hugepage Compaction
+
+#Red Hat/CentOS: /sys/kernel/mm/redhat_transparent_hugepage/defrag
+
+#biadmin/Debian, OEL, SLES: /sys/kernel/mm/transparent_hugepage/defrag
+
+cat /sys/kernel/mm/transparent_hugepage/defrag
+
+sudo -i
+
+#source /etc/rc.local
+
+
+#nano /etc/systemd/system/disable-thp.service
+
+sudo nano /etc/default/grub
+
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash transparent_hugepage=never"
+
+sudo update-grub
+
+# Set Swappiness
+
+
+sudo sysctl -a | grep vm.swappiness
+
+sudo su -c 'cat >>/etc/sysctl.conf <<EOL
+'vm.swappiness=0'
+EOL'
+
+sudo sysctl -p
+
+# Configure NTP 
+
+timedatectl status
+timedatectl list-timezones
+timedatectl list-timezones | grep Asia/Kolkata
+sudo timedatectl set-timezone Asia/Kolkata
+timedatectl status
+sudo ntpq -p
+sudo apt-get install ntp -y
+timedatectl status
+
+sudo nano /etc/ntpsec/ntp.conf
+
+# Root Reserved Space
+
+mkfs.ext4 -m 0 /dev/xvda1 ( filesystem is not suppose to be mounted)
+
+sudo file -sL /dev/xvda1
+
+lsblk
+
+sudo tune2fs -m 0 /dev/xvda1
+
+Most frequently asked Question whether a JBOD configuration, RAID configuration, or LVM configuration is required. The entire Hadoop ecosystem was created with a JBOD configuration in mind. HDFS is an immutable filesystem that was designed for large file sizes with long sequential reads. This goal plays well with stand-alone SATA drives, as they get the best performance with sequential reads.
+In summary, whereas RAID is typically used to add redundancy to an existing system, HDFS already has that built in.
+In fact, using a RAID system with Hadoop can negatively affect performance.
+For the same reasons, configuring your Hadoop drives under LVM is neither necessary nor recommended.
+
+##Configure SSH Password less logins 
+
+sudo su -c touch /home/biadmin/.ssh/config; echo -e \ "Host *\n StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" \ > ~/.ssh/config
+
+echo -e  'y\n'| ssh-keygen -t rsa -P "" -f $HOME/.ssh/id_rsa
+
+cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+sudo service ssh restart
+
+ssh localhost
+
+
+
+# Install Hadoop
+
+wget https://archive.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz -P ~/Downloads
+sudo tar zxvf ~/Downloads/hadoop-* -C /usr/local
+sudo mv /usr/local/hadoop-* /usr/local/hadoop
+
+sudo apt-get update && sudo apt-get dist-upgrade -y && sudo reboot
+
+#CREATE SNAPSHOT AT THIS POINT.
+
+sudo nano /etc/hosts and include these lines:FQDN
+
+
+127.0.0.1 localhost
+
+172.31.30.102  ip-172-31-30-102.ap-south-1.compute.internal nn
+172.31.23.4   ip-172-31-23-4.ap-south-1.compute.internal rm
+172.31.23.3  ip-172-31-23-3.ap-south-1.compute.internal dn
+
+# Configure pdsh
+
+sudo apt-get install pdsh -y
+sudo nano /etc/genders
+export PDSH_RCMD_TYPE=ssh
+pdsh -a uptime
+
+#Setting Up Secondary Name Node
+create the masters file in HADOOP_CONF_DIR
+  
+hostname -f  > /usr/local/hadoop/etc/hadoop/masters
+
+<property> 
+   <name>dfs.secondary.http.address</name>
+   <value>$secondarynamenode.full.hostname:50090</value>
+   <description>SecondaryNameNodeHostname</description>
+</property>
+
+nano /usr/local/hadoop/etc/hadoop/slaves
+
+#Update core-site.xml
+
+sudo sed -i '/<configuration>/,/<\/configuration>/d' /usr/local/hadoop/etc/hadoop/core-site.xml
+
+sudo su -c 'cat >> /usr/local/hadoop/etc/hadoop/core-site.xml <<EOL
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://nn:9000</value>
+  </property>
+</configuration>
+
+EOL'
+
+#Update hdfs-site.xml on name node 
+
+mkdir -p /usr/local/hadoop/data/hdfs/namenode
+
+sudo sed -i '/<configuration>/,/<\/configuration>/d' /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+sudo su -c 'cat >>/usr/local/hadoop/etc/hadoop/hdfs-site.xml <<EOL
+<configuration>
+  
+
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///usr/local/hadoop/data/hdfs/namenode</value>
+  </property>
+<property> 
+   <name>dfs.secondary.http.address</name>
+   <value>localhost:50090</value>
+   <description>SecondaryNameNodeHostname</description>
+</property>
+ <property>
+    <name>dfs.datanode.name.dir</name>
+    <value>file:///usr/local/hadoop/data/hdfs/datanode</value>
+  </property>
+</configuration>
+EOL'
+
+ssh dn
+
+#Update hdfs-site.xml on datanode
+
+sudo sed -i '/<configuration>/,/<\/configuration>/d' /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+sudo su -c 'cat >>/usr/local/hadoop/etc/hadoop/hdfs-site.xml <<EOL
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+  </property>
+  <property>
+    <name>dfs.datanode.name.dir</name>
+    <value>file:///usr/local/hadoop/data/hdfs/datanode</value>
+  </property>
+</configuration>
+EOL'
+
+mkdir -p /usr/local/hadoop/data/hdfs/datanode
+
+exit 
+
+#Update yarn-site.xml
+
+  sudo sed -i '/<configuration>/,/<\/configuration>/d' /usr/local/hadoop/etc/hadoop/yarn-site.xml
+
+sudo su -c 'cat >>/usr/local/hadoop/etc/hadoop/yarn-site.xml <<EOL
+
+
+<configuration>
+<!-- Site specific YARN configuration properties -->
+ <property>
+     <name>yarn.nodemanager.aux-services</name>
+     <value>mapreduce_shuffle</value>
+   </property> 
+   <property>
+     <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+     <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+   </property>
+   <property>
+     <name>yarn.resourcemanager.hostname</name>
+     <value>rm</value>
+   </property>
+</configuration>
+EOL'
+
+#Update mapred-site.xml
+
+cp  /usr/local/hadoop/etc/hadoop/mapred-site.xml.template /usr/local/hadoop/etc/hadoop/mapred-site.xml
+
+sudo sed -i '/<configuration>/,/<\/configuration>/d' /usr/local/hadoop/etc/hadoop/mapred-site.xml
+
+sudo su -c 'cat >>/usr/local/hadoop/etc/hadoop/mapred-site.xml <<EOL
+<configuration>
+  <property>
+    <name>mapreduce.jobtracker.address</name>
+    <value>rm:54311</value>
+  </property>
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+</configuration>
+EOL'
+
+sudo chown -R biadmin:biadmin $HADOOP_HOME
+
+#SCP all the files to ...dn...rm...
+
+cd /usr/local/hadoop/etc/hadoop && scp core-site.xml mapred-site.xml yarn-site.xml slaves rm:/usr/local/hadoop/etc/hadoop
+
+ssh dn for hdfs-site.xml
+
+exit to nn
+
+#Format Namenode
+
+hdfs namenode -format
+
+LOOK FOR ERROR Message namenode has been successfully formatted.
+
+start-dfs.sh
+
+$HADOOP_HOME/sbin/mr-jobhistory-daemon.sh start historyserver
+
+ssh rm
+
+start-yarn.sh
+
+pdsh -a jps
+pdsh -w dn jps
+pdsh -w rm jps
+pdsh -w nn jps
+pdsh -a (press enter)
+pdsh>> ls
+hdfs dfs -mkdir /user
+hdfs dfs -mkdir /user/biadmin
+
+hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar teragen 500000 random-data
+
+hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar terasort random-data sorted-data
+
+hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-*-tests.jar TestDFSIO -write -nrFiles 10 -fileSize 5MB
+
+hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-*-tests.jar TestDFSIO -read -nrFiles 10 -fileSize 5MB
+
+NameNode 
+http://nn_host:port/ 
+Default HTTP port is 50070. 
+ResourceManager 
+http://rm_host:port/ 
+Default HTTP port is 8088. 
+MapReduce JobHistory Server 
+http://jhs_host:port/ 
+Default HTTP port is 19888. 
+
+
+SecondaryNameNode 
+http://snn_host:port/ 
+Default HTTP port is 50090
+DataNode
+http://dn_host:port/ 
+Default HTTP port is 50075. 
+
+http://jhs_host:port/ 
+Default HTTP port is 19888. 
+
+hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar pi 10 100000
+
 \
 \
 \
